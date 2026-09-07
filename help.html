@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help — PrayIt</title>
+<meta name="description" content="How to use PrayIt — the daily prayer flow, people and events, rotation, schedule balancing, devotionals, and backup.">
+<link rel="stylesheet" href="style.css">
+<style>
+.help-hero {
+  padding: 60px 0 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 56px;
+}
+.help-hero h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin-top: .3em; }
+.help-hero p  { font-size: 1.05rem; color: var(--ink-muted); margin-top: .7em; }
+
+.help-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Sidebar */
+.help-sidebar {
+  position: sticky;
+  top: 80px;
+}
+.help-sidebar nav { display: flex; flex-direction: column; gap: 4px; }
+.help-sidebar a {
+  color: var(--ink-muted);
+  font-size: .92rem;
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  transition: background .12s, color .12s;
+}
+.help-sidebar a:hover,
+.help-sidebar a.active {
+  background: var(--indigo-pale);
+  color: var(--indigo);
+}
+.help-sidebar .section-group {
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 16px 12px 4px;
+}
+
+/* Content */
+.help-section {
+  margin-bottom: 64px;
+  scroll-margin-top: 80px;
+}
+.help-section h2 {
+  font-size: 1.55rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 28px;
+}
+.help-section h2 .tab-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: var(--indigo-pale);
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.amber-bg { background: var(--amber-light) !important; }
+
+.help-section h3 {
+  font-size: 1.08rem;
+  margin: 24px 0 8px;
+  color: var(--ink);
+}
+.help-section p {
+  font-size: .96rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+  max-width: 62ch;
+}
+.help-section ul {
+  margin: 8px 0 8px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.help-section li {
+  font-size: .95rem;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+/* Q&A */
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.faq-item summary {
+  padding: 15px 20px;
+  font-weight: 600;
+  font-size: .97rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  color: var(--ink);
+  user-select: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; font-size: 1.2rem; color: var(--indigo); transition: transform .2s; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item[open] summary { border-bottom: 1px solid var(--border); }
+.faq-body {
+  padding: 16px 20px;
+  font-size: .93rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+  background: var(--ground);
+}
+.faq-body p + p { margin-top: .7em; }
+
+/* Tip box */
+.tip {
+  background: var(--indigo-pale);
+  border-left: 3px solid var(--indigo);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: .93rem;
+  color: var(--ink);
+}
+.tip strong { color: var(--indigo); }
+
+/* Action pills */
+.actions-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.action-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: .85rem;
+  font-weight: 600;
+  border: 1.5px solid;
+}
+.pill-green  { border-color: #2E9E4F; color: #2E9E4F; background: #EBF7EF; }
+.pill-orange { border-color: #D97B20; color: #D97B20; background: #FDF3E7; }
+.pill-blue   { border-color: #3A6FD8; color: #3A6FD8; background: #EAF1FD; }
+
+/* CSV table */
+.csv-table {
+  width: 100%;
+  max-width: 620px;
+  border-collapse: collapse;
+  font-size: .9rem;
+  margin: 16px 0 18px;
+}
+.csv-table th {
+  background: var(--indigo-pale);
+  color: var(--indigo);
+  font-weight: 700;
+  text-align: left;
+  padding: 9px 14px;
+  border-bottom: 2px solid var(--border);
+}
+.csv-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-muted);
+  vertical-align: top;
+}
+.csv-table tr:last-child td { border-bottom: none; }
+.csv-table code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: .87rem;
+  color: var(--indigo);
+}
+
+@media (max-width: 700px) {
+  .help-layout { grid-template-columns: 1fr; }
+  .help-sidebar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-icon">🙏</span>
+      PrayIt
+    </a>
+    <ul class="nav-links">
+      <li><a href="help.html" aria-current="page">Help</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="support.html">Support</a></li>
+      <li><a href="index.html#download" class="nav-cta">Download</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+<div class="page-content">
+
+  <div class="help-hero">
+    <p class="eyebrow">Documentation</p>
+    <h1>How to use PrayIt</h1>
+    <p>The four tabs, how rotation and schedules work, the daily devotional, and how to back up your list.</p>
+  </div>
+
+  <div class="help-layout">
+
+    <!-- Sidebar -->
+    <aside class="help-sidebar">
+      <nav aria-label="Help sections">
+        <div class="section-group">Tabs</div>
+        <a href="#pray">🙏 Pray</a>
+        <a href="#people">👥 People</a>
+        <a href="#all-prayers">📋 All Prayers</a>
+        <a href="#admin">⚙️ Admin</a>
+        <div class="section-group">How it works</div>
+        <a href="#rotation">🔁 Rotation</a>
+        <a href="#balancing">📅 Schedule balancing</a>
+        <a href="#devotionals">📖 Devotionals</a>
+        <div class="section-group">Your data</div>
+        <a href="#backup">💾 Backup &amp; Restore</a>
+        <a href="#faq">❓ FAQ</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <div class="help-content">
+
+      <!-- Pray -->
+      <section class="help-section" id="pray">
+        <h2><span class="tab-icon">🙏</span> Pray</h2>
+
+        <p>The Pray tab is the point of the app. It walks you through your prayer list one category at a time, in the order you've set. If you've turned on a devotional, that comes first — read it and tap <strong>Continue</strong>.</p>
+
+        <h3>What each category screen shows</h3>
+        <p>For the category you're on, PrayIt shows two things:</p>
+        <ul>
+          <li><strong>Scheduled requests that are due today</strong> — grouped by person, and sorted with the most frequent (Daily) first.</li>
+          <li><strong>A page from the rotation</strong> — a handful of your unscheduled requests for this category, under an <em>"Also praying for"</em> heading. How many appear at once is the category's reveal size (set in Admin).</li>
+        </ul>
+        <p>If there's nothing due and nothing in rotation for a category, it simply says so. Tap <strong>Continue</strong> to move to the next category, or <strong>Finish</strong> on the last one.</p>
+
+        <h3>Marking a request</h3>
+        <p>Tap the green circle next to a request to mark it <strong>Prayed</strong>. It drops out of view for the rest of the day. If it was a rotation item, the next one takes its place — so you can keep going as long as you like, and wherever you stop is where you pick up next time.</p>
+
+        <h3>Swipe actions</h3>
+        <div class="actions-row">
+          <span class="action-pill pill-orange">✎ Update</span>
+          <span class="action-pill pill-blue">✓ Answered</span>
+        </div>
+        <p>Swipe <strong>right</strong> on a request to add an <strong>Update</strong> — a dated note on how it's going, without closing the request. Swipe <strong>left</strong> to mark it <strong>Answered</strong> with a note; it moves to the Answered list and stops appearing in the flow.</p>
+
+        <h3>Show More</h3>
+        <p>If a category has more unscheduled requests than fit on today's page, a <strong>Show More</strong> button reveals another batch of the same size. It's a peek ahead — marking something Prayed resets it.</p>
+
+        <h3>Start Over</h3>
+        <p>After the last category you'll see an <em>All Done</em> screen with a <strong>Start Over</strong> button. It just lets you walk the categories again from the top — it does not un-pray anything or rewind your place in the rotation.</p>
+      </section>
+
+      <!-- People -->
+      <section class="help-section" id="people">
+        <h2><span class="tab-icon">👥</span> People</h2>
+
+        <p>The People tab is your roster — everyone and everything you pray for. Each row shows a name and how many active requests it has. Tap a row to open that person or event.</p>
+
+        <h3>Two list styles</h3>
+        <p>In Admin you can choose how this list looks:</p>
+        <ul>
+          <li><strong>Grouped by category</strong> — sections for Family, Church, and so on.</li>
+          <li><strong>Flat A–Z</strong> — one alphabetical list, sorted by last name, with an A–Z scrubber down the side to jump around quickly.</li>
+        </ul>
+
+        <h3>Adding someone</h3>
+        <p>Tap <strong>+</strong>, enter a name, and pick a category (the default category is pre-selected). Turn on <em>"This is an event, not a person"</em> for things like <em>Elders &amp; Church</em> or <em>Women's ministry</em>. You can type their first prayer request right on the same screen, or leave it blank and add requests later.</p>
+
+        <h3>A person's detail screen</h3>
+        <p>Shows their category, any notes, their <strong>Active Requests</strong>, and an <strong>Answered</strong> section once something's been closed out. From the <strong>⋯</strong> menu you can add a request or edit the person. Swipe a request to delete it, or tap the seal icon to mark it answered.</p>
+
+        <h3>Search</h3>
+        <p>The search bar matches both names and the text of requests — so searching "salvation" finds every person with a request about it.</p>
+      </section>
+
+      <!-- All Prayers -->
+      <section class="help-section" id="all-prayers">
+        <h2><span class="tab-icon">📋</span> All Prayers</h2>
+
+        <p>A single combined view of every request, across all people and categories. Use the toggle at the top to switch between:</p>
+        <ul>
+          <li><strong>Active</strong> — everything still being prayed for</li>
+          <li><strong>Answered</strong> — everything closed out, with its answer note</li>
+          <li><strong>All</strong> — both together</li>
+        </ul>
+        <p>Requests stay grouped under their category and person, so it reads like a printed prayer list.</p>
+
+        <h3>Sharing / exporting a list</h3>
+        <p>Tap the share button in the top corner to export the current view as plain text — ready to paste into an email, a message, or a notes app, or to hand to someone else who prays with you.</p>
+      </section>
+
+      <!-- Admin -->
+      <section class="help-section" id="admin">
+        <h2><span class="tab-icon amber-bg">⚙️</span> Admin</h2>
+
+        <p>Everything you configure lives here.</p>
+
+        <h3>Categories</h3>
+        <p>Tap <strong>Edit</strong>, then drag to reorder — this is the order you pray through them. Tap a category to rename it, set how many requests it <strong>reveals at a time</strong> in the Pray flow, or make it the <strong>default</strong> for new people (only one category can be the default).</p>
+
+        <h3>People List</h3>
+        <p>The <em>Group by category</em> toggle switches the People tab between sections and the flat A–Z list.</p>
+
+        <h3>Daily Devotional</h3>
+        <p>Pick a source — <strong>None</strong>, <strong>My Own</strong>, <strong>Spurgeon's Morning and Evening</strong>, or <strong>Streams in the Desert</strong>. With <em>My Own</em> selected, a <strong>Manage My Devotionals</strong> link appears. See <a href="#devotionals">Devotionals</a> below.</p>
+
+        <h3>Prayer Schedule</h3>
+        <p><strong>Balance scheduled prayers</strong> spreads your fixed-schedule requests evenly across the calendar. It's on by default. <strong>Balance Now</strong> re-runs it on demand. See <a href="#balancing">Schedule balancing</a> below.</p>
+
+        <h3>Backup &amp; Restore</h3>
+        <p>Export a JSON backup, or import one. Import always merges — see <a href="#backup">Backup &amp; Restore</a>.</p>
+
+        <h3>Your Data</h3>
+        <p>A quick count of categories, people/events, active requests, and answered prayers.</p>
+
+        <h3>Delete All Data</h3>
+        <p>Permanently removes every category, person, and request. There's a confirmation step — export a backup first.</p>
+      </section>
+
+      <!-- Rotation -->
+      <section class="help-section" id="rotation">
+        <h2><span class="tab-icon amber-bg">🔁</span> Rotation</h2>
+
+        <p>A request with <strong>no fixed schedule</strong> goes into its category's <strong>rotation pool</strong>. You don't see the whole pool every day — you see a page of it, oldest first, and the app remembers how far you've actually prayed.</p>
+
+        <h3>How the page moves</h3>
+        <p>Each day's page starts right after the last request you prayed through. Mark that page done and the next page begins where it left off — today, tomorrow, or next week. It doesn't matter how many you get through in one sitting.</p>
+
+        <div class="tip"><strong>Why it doesn't skip anyone:</strong> if one person has two requests and you happen to pray the second before the first, the rotation won't jump past the first. It only moves forward once a run of requests is genuinely done.</div>
+
+        <h3>Set the page size per category</h3>
+        <p>In Admin, each category has a <em>"Reveal at least N at a time"</em> setting. A category with a lot of people might reveal 5; a short one might reveal 2. <strong>Show More</strong> in the Pray flow reveals another batch when you want to go further.</p>
+      </section>
+
+      <!-- Balancing -->
+      <section class="help-section" id="balancing">
+        <h2><span class="tab-icon amber-bg">📅</span> Schedule balancing</h2>
+
+        <p>When you give a request a fixed schedule — Daily, Weekly, every few days — it comes due on its own rhythm. The catch: if you add five "every 5 days" requests in one sitting, they'd all come due together every fifth day, leaving the days between empty.</p>
+
+        <h3>What balancing does</h3>
+        <p><strong>Balance scheduled prayers</strong> (Admin → Prayer Schedule) staggers your fixed-schedule requests so that roughly the same number come due each day — across your whole list, whatever the mix of intervals. It never touches rotation requests or anything you've marked answered.</p>
+
+        <ul>
+          <li><strong>On by default.</strong> While it's on, each new scheduled request is placed on the lightest day as you create it.</li>
+          <li><strong>Balance Now</strong> re-spreads everything on demand — run it whenever a day starts feeling heavy.</li>
+          <li>Turning the toggle <strong>off then back on</strong> also re-balances everything.</li>
+        </ul>
+
+        <div class="tip"><strong>Note:</strong> balancing shifts <em>when</em> a request next comes due, not its interval. A "Weekly" request stays weekly — it just may move to a different day of the week. It also drifts over time as you pray things at odd hours, so re-running it occasionally is normal.</div>
+      </section>
+
+      <!-- Devotionals -->
+      <section class="help-section" id="devotionals">
+        <h2><span class="tab-icon">📖</span> Devotionals</h2>
+
+        <p>When a source is set, the Pray tab opens with a short devotional — a verse and a prayer or reflection — before the categories. Choose the source in <strong>Admin → Daily Devotional</strong>.</p>
+
+        <h3>My Own</h3>
+        <p>Write your own entries in <strong>Manage My Devotionals</strong>. Each has a reference, the verse text, and a prayer. They're shown one per day, in the order you arrange them, looping back to the start after the last one. The cycle begins at entry #1 on the day you add your first one.</p>
+
+        <h3>Bundled books</h3>
+        <p><strong>Spurgeon's Morning and Evening</strong> and <strong>Streams in the Desert</strong> are included in full (both public domain). They're keyed to the calendar, so you get the entry for today's date.</p>
+
+        <h3>Importing your own from a spreadsheet</h3>
+        <p>In <strong>Manage My Devotionals</strong>, tap <strong>Import from CSV</strong>. Build the list in any spreadsheet app and export it as a <em>.csv</em> with these three columns, in this order, with a header row on top:</p>
+
+        <table class="csv-table">
+          <thead>
+            <tr><th>Column</th><th>What goes in it</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Reference</code></td><td>The verse reference</td><td>Psalm 23:1</td></tr>
+            <tr><td><code>Verse</code></td><td>The verse text</td><td>The Lord is my shepherd; I shall not want.</td></tr>
+            <tr><td><code>Prayer</code></td><td>Your prayer or reflection</td><td>Father, thank you that you provide…</td></tr>
+          </tbody>
+        </table>
+
+        <p>Imported entries are added after any you already have. A row whose reference and verse already exist is skipped, so re-importing an updated sheet only adds what's new.</p>
+
+        <div class="tip"><strong>If an import reports "0 imported":</strong> it usually means the rows were all duplicates, or the file has unusual characters — most often curly "smart quotes" that got scrambled when the sheet was saved as CSV. Retype those as plain straight quotes and export again.</div>
+      </section>
+
+      <!-- Backup -->
+      <section class="help-section" id="backup">
+        <h2><span class="tab-icon">💾</span> Backup &amp; Restore</h2>
+
+        <p>Your data syncs through iCloud automatically, but a local backup is still worth keeping.</p>
+
+        <div class="tip"><strong>Finding the tabs on iPad:</strong> the tab bar runs across the top. If a tab isn't visible, tap the <strong>&gt;</strong> chevron at the right end to reveal the rest.</div>
+
+        <h3>Export</h3>
+        <p><strong>Admin → Export Backup</strong> creates a JSON file and opens the share sheet, so you can save it to Files, Dropbox, or email it to yourself. It contains every category, person, request, update, and custom devotional.</p>
+
+        <h3>Import</h3>
+        <p><strong>Admin → Import Backup</strong>, then pick a JSON file. Import <strong>merges</strong> — it adds what's in the file and never deletes or overwrites what's already there. If the backup has a default category, your current default is un-flagged so there's still only one.</p>
+
+        <div class="tip"><strong>Tip:</strong> if you just used <em>Delete All Data</em> and iCloud sync is on, wait 30–60 seconds before importing. iCloud may still be processing the deletions, and importing too soon can cause a conflict.</div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="help-section" id="faq">
+        <h2><span class="tab-icon">❓</span> Frequently Asked Questions</h2>
+
+        <details class="faq-item">
+          <summary>What's the difference between "Prayed" and "Answered"?</summary>
+          <div class="faq-body">
+            <p><strong>Prayed</strong> (the green circle) just means you prayed for it today — it hides for the rest of the day and comes back tomorrow on its schedule or in rotation. <strong>Answered</strong> closes the request out for good, with a note about how it was answered, and moves it to the Answered list.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>I'm praying about something ongoing that will never really be "answered." What do I do?</summary>
+          <div class="faq-body">
+            <p>Keep it active and use <strong>Update</strong> (swipe right in the Pray flow, or the History section on the request). Updates are dated notes on how something's going — they don't change the schedule, the rotation, or whether it's answered.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Why did a scheduled request move to a different day?</summary>
+          <div class="faq-body">
+            <p>That's <strong>schedule balancing</strong> (Admin → Prayer Schedule), which is on by default. It spreads your fixed-schedule requests so no single day is overloaded. The interval is unchanged — a Weekly request is still weekly, it just may fall on a different day. Turn the toggle off if you'd rather schedules stay exactly as entered.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Should I give a request a schedule or leave it unscheduled?</summary>
+          <div class="faq-body">
+            <p>Use a <strong>schedule</strong> for things you want to pray on a set rhythm — a spouse daily, a missionary weekly. Leave it <strong>unscheduled</strong> for the long tail of people and requests you want to get to regularly but not on a fixed day; those rotate a page at a time so you cover everyone over the course of a week or two.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Does PrayIt work without iCloud?</summary>
+          <div class="faq-body">
+            <p>Yes. All your data is stored on the device whether or not iCloud is on — you just won't get sync to your other devices. If you're not using iCloud, export a backup now and then so you have a copy.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I use it on my iPad or Mac?</summary>
+          <div class="faq-body">
+            <p>PrayIt is built for iPhone and runs on iPad. iCloud keeps your list in sync when you move between devices.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Does "Start Over" undo my prayers for the day?</summary>
+          <div class="faq-body">
+            <p>No. It only sends you back to the first category so you can walk through again. Anything you marked Prayed stays that way, and your place in the rotation keeps moving forward.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I report a bug or ask for a feature?</summary>
+          <div class="faq-body">
+            <p>Head to the <a href="support.html">Support page</a> and send an email. Include your build number (Admin → About) and what you expected versus what happened.</p>
+          </div>
+        </details>
+
+      </section>
+
+    </div><!-- /help-content -->
+  </div><!-- /help-layout -->
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© 2026 PrayIt · Built by Bruce Barclay</span>
+    <ul class="footer-links">
+      <li><a href="help.html">Help</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="support.html">Support</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

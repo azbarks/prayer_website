@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrayIt</title>
+<meta name="description" content="A personal daily-prayer app. Keep a roster of the people and events you pray for, attach requests to each, and walk through them one category at a time — with an optional daily devotional.">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Hero ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 60px;
+  align-items: center;
+  padding: 80px 0 72px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--indigo-pale);
+  color: var(--indigo);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 22px;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-style: italic;
+  line-height: 1.12;
+  margin-bottom: 22px;
+  color: var(--ink);
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--indigo);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--ink-muted);
+  max-width: 46ch;
+  margin-bottom: 36px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hero-phone {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.phone-frame {
+  width: 240px;
+  background: var(--nav-bg);
+  border-radius: 38px;
+  border: 6px solid rgba(255,255,255,.12);
+  box-shadow: 0 30px 80px rgba(30,28,74,.30), 0 0 0 1px rgba(255,255,255,.04);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-notch {
+  width: 80px;
+  height: 26px;
+  background: var(--nav-bg);
+  border-radius: 0 0 16px 16px;
+  align-self: center;
+  margin-top: -1px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.phone-screen {
+  flex: 1;
+  background: #F7F6F2;
+  padding: 14px 14px 18px;
+  overflow: hidden;
+}
+
+.mock-title {
+  font-family: 'Lora', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1B1930;
+  margin-bottom: 12px;
+}
+
+.mock-card {
+  background: white;
+  border-radius: 12px;
+  padding: 13px 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07);
+}
+
+.mock-devo-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #9490BB;
+  margin-bottom: 6px;
+}
+.mock-verse {
+  font-size: 12px;
+  font-style: italic;
+  color: #1B1930;
+  line-height: 1.5;
+}
+.mock-ref {
+  font-size: 10px;
+  color: #9490BB;
+  margin-top: 5px;
+}
+
+.mock-section-label {
+  font-size: 11px;
+  color: #9490BB;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin: 14px 0 8px;
+}
+
+.mock-person {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1B1930;
+  margin: 10px 0 6px;
+}
+.mock-person::before { content: '👤'; font-size: 11px; }
+
+.mock-req {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 7px 0;
+  border-bottom: 1px solid #EFEDF7;
+}
+.mock-req:last-child { border-bottom: none; }
+.mock-check {
+  width: 15px; height: 15px;
+  border: 2px solid #2E9E4F;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.mock-check.done {
+  background: #2E9E4F;
+}
+.mock-req-text {
+  flex: 1;
+  font-size: 11.5px;
+  color: #1B1930;
+  line-height: 1.4;
+}
+.mock-req.done .mock-req-text {
+  color: #9490BB;
+  text-decoration: line-through;
+}
+.mock-sched {
+  font-size: 9.5px;
+  color: #9490BB;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Trust bar ── */
+.trust-bar {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .9rem;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+.trust-icon {
+  font-size: 1.2rem;
+}
+
+/* ── Features ── */
+.features {
+  padding: 80px 0 0;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-top: 0;
+}
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+.feature-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+}
+.icon-indigo { background: var(--indigo-pale); }
+.icon-amber  { background: var(--amber-light); }
+
+.feature-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: .92rem;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+/* ── How it works ── */
+.how {
+  padding: 80px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.how-steps { display: flex; flex-direction: column; gap: 28px; }
+.step {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+.step-num {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--indigo);
+  color: white;
+  font-weight: 700;
+  font-size: .9rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-body h4 { font-size: 1rem; margin-bottom: 4px; }
+.step-body p  { font-size: .9rem; color: var(--ink-muted); max-width: 38ch; }
+
+.how-visual {
+  background: var(--indigo-pale);
+  border-radius: 16px;
+  height: 340px;
+  display: grid;
+  place-items: center;
+  color: var(--indigo);
+  font-size: 5rem;
+  border: 1px solid var(--border);
+}
+
+/* ── iCloud band ── */
+.icloud-band {
+  margin-top: 80px;
+  background: var(--indigo-deep);
+  border-radius: 16px;
+  padding: 48px 52px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.icloud-band h2 {
+  color: white;
+  font-size: 1.7rem;
+  margin-bottom: 10px;
+}
+.icloud-band p {
+  color: #9490BB;
+  font-size: .95rem;
+}
+.icloud-band .btn-primary {
+  white-space: nowrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-phone { display: none; }
+  .how { grid-template-columns: 1fr; }
+  .how-visual { display: none; }
+  .icloud-band { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-icon">🙏</span>
+      PrayIt
+    </a>
+    <ul class="nav-links">
+      <li><a href="help.html">Help</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="support.html">Support</a></li>
+      <li><a href="#download" class="nav-cta">Download</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+<div class="page-content">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="hero-tag">
+        <span>📱</span> Coming soon for iPhone
+      </div>
+      <h1>Pray through the people who matter, <em>one category at a time</em></h1>
+      <p class="hero-sub">PrayIt keeps a roster of the people and events you pray for, with a list of requests under each. Open it each day and it walks you through them — starting, if you like, with a short devotional.</p>
+      <div class="hero-actions" id="download">
+        <a href="#" class="btn btn-primary" aria-label="Coming soon to the App Store">
+          ⬇ Coming soon to the App Store
+        </a>
+        <a href="help.html" class="btn btn-ghost">See how it works</a>
+      </div>
+    </div>
+
+    <div class="hero-phone" aria-hidden="true">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="mock-title">Pray</div>
+
+          <div class="mock-card">
+            <div class="mock-devo-label">Today's Devotional</div>
+            <div class="mock-verse">"The steadfast love of the Lord never ceases; his mercies never come to an end."</div>
+            <div class="mock-ref">— Lamentations 3:22</div>
+          </div>
+
+          <div class="mock-card">
+            <div class="mock-section-label">Family</div>
+
+            <div class="mock-person">Caleb &amp; Kelly</div>
+            <div class="mock-req done">
+              <div class="mock-check done"></div>
+              <div class="mock-req-text">A marriage that points to Christ</div>
+              <div class="mock-sched">Daily</div>
+            </div>
+            <div class="mock-req">
+              <div class="mock-check"></div>
+              <div class="mock-req-text">Wisdom raising the girls</div>
+              <div class="mock-sched">Every 3 days</div>
+            </div>
+
+            <div class="mock-person">Sam Rivera</div>
+            <div class="mock-req">
+              <div class="mock-check"></div>
+              <div class="mock-req-text">A return to faith</div>
+              <div class="mock-sched">No schedule</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust bar -->
+  <div class="trust-bar">
+    <div class="trust-item"><span class="trust-icon">☁️</span> Syncs across your Apple devices via iCloud</div>
+    <div class="trust-item"><span class="trust-icon">🔒</span> Your data never leaves your iCloud account</div>
+    <div class="trust-item"><span class="trust-icon">🚫</span> No ads. No subscriptions. No tracking.</div>
+    <div class="trust-item"><span class="trust-icon">🍎</span> Requires iOS 17 or later</div>
+  </div>
+
+  <!-- Features -->
+  <section class="features">
+    <p class="eyebrow">What's inside</p>
+    <h2 class="section-title">A calmer way to keep a prayer list</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-indigo">🙏</div>
+        <h3>The daily flow</h3>
+        <p>Open the Pray tab and move through your categories in order. Each screen shows what's due today — mark a request prayed, jot an update, or close it out as answered.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-indigo">👥</div>
+        <h3>People &amp; events</h3>
+        <p>Keep a roster of everyone and everything you pray for, each with its own list of requests. Browse grouped by category, or as one flat A–Z list with a scrubber.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-amber">🔁</div>
+        <h3>Rotation &amp; schedules</h3>
+        <p>Give a request a fixed rhythm — daily, weekly, every few days — or leave it unscheduled and let it rotate. Either way you cover everyone over time without a wall of text each morning.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-amber">📖</div>
+        <h3>Daily devotional</h3>
+        <p>Start each session with a verse and a prayer. Write your own to cycle through, or use a bundled public-domain classic — Spurgeon's <em>Morning and Evening</em> or <em>Streams in the Desert</em>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="how">
+    <div>
+      <p class="eyebrow">How it works</p>
+      <h2 class="section-title">Set it up once, pray from it every day</h2>
+      <div class="how-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Add your people and events</h4>
+            <p>Sort them into categories — Family, Church, Friends, Praise. One category can be the default for anything new.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Attach prayer requests</h4>
+            <p>Add as many requests as you like under each person. Give a request a schedule, or leave it open to come up in rotation.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Open the Pray tab</h4>
+            <p>Walk through one category at a time. Mark things prayed as you go — tomorrow picks up right where you left off.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="how-visual" aria-hidden="true">🙏</div>
+  </section>
+
+  <!-- iCloud band -->
+  <div class="icloud-band">
+    <div>
+      <h2>Your list, always with you</h2>
+      <p>PrayIt syncs across your iPhone and iPad via iCloud. No account to create — just the Apple ID you already use. Nothing is ever sent to anyone else.</p>
+    </div>
+    <a href="help.html" class="btn btn-primary">Read the Help</a>
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© 2026 PrayIt · Built by Bruce Barclay</span>
+    <ul class="footer-links">
+      <li><a href="help.html">Help</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="support.html">Support</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
